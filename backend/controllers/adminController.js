@@ -1,6 +1,5 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/userModel.js");
-const mongoose = require("mongoose");
 
 // Create Account for Staff or Librarian
 const createAccount = async (req, res) => {
@@ -23,7 +22,14 @@ const createAccount = async (req, res) => {
     });
     await newUser.save();
 
-    res.status(201).json({ message: "Account created successfully" });
+    const userData = {
+      name,
+      email,
+      role,
+      [`${role}Id`]: id,
+    };
+
+    res.status(201).json({ message: "Account created successfully", account: userData });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
@@ -59,10 +65,13 @@ const editAccount = async (req, res) => {
 
 // Delete Account
 const deleteAccount = async (req, res) => {
-  const { userId } = req.params;
+  const { id } = req.params;
   try {
-    await User.findByIdAndDelete(userId);
-    res.status(200).json({ message: "Account deleted successfully" });
+    const deletedUser = await User.findByIdAndDelete(id);
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "Account deleted successfully", deletedUser });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }

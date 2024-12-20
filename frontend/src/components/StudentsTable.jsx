@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import Modal from "./Modal";
-import Button from "./Button";
+import Modal from "../components/reUsableComponents/Modal";
+import Button from "../components/reUsableComponents/Button";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -57,17 +57,17 @@ const StudentsTable = ({ schoolMemebers, tableHeaders, deleteStudentsApi }) => {
           </tr>
         </thead>
         <tbody>
-          {schoolMemebers.map((member) => (
-            <tr key={member.name} className=" border-t text-sm">
+          {schoolMemebers && schoolMemebers.map((member, index) => (
+            <tr key={index} className=" border-t text-sm">
               <td className="py-4 px-5">
                 <div className="flex items-center space-x-2">
                   <img src="Profile.png" className="h-10 w-10" />
                   <span>{member.name}</span>
                 </div>
               </td>
-              <td className="py-4 px-5">{member.studentId}</td>
-              <td className="py-4 px-5">{member.class}</td>
-              <td className="py-4 px-5">{member.email}</td>
+              <td className="py-4 px-5">{member?.studentId}</td>
+              <td className="py-4 px-5">{member?.class}</td>
+              <td className="py-4 px-5">{member?.email}</td>
               <td className="py-4 px-5">
                 <div className="flex flex-row space-x-4 text-gray-600">
                   <FaEye

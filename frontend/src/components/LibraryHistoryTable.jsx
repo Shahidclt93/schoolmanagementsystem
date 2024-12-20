@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import Modal from "../components/reUsableComponents/Modal";
 import FormComponent from "./reUsableComponents/FormComponent";
-import { setLibraryId, clearLibraryId } from "../redux/idSlice";
+import { setLibraryId } from "../redux/idSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const LibraryHistoryTable = ({
@@ -20,9 +20,8 @@ const LibraryHistoryTable = ({
     setSelectedBookRecord(book);
     dispatch(setLibraryId(book._id));
   };
-  const confirmEdit = async (values) => {
+  const confirmEdit = (values) => {
     editLibraryRecordApi(values);
-    dispatch(clearLibraryId());
   };
 
   const fieldConfigs = [
@@ -48,7 +47,6 @@ const LibraryHistoryTable = ({
     type: "submit",
     height: "py-2",
     width: "w-[150px]",
-    onClick: (values)=> confirmEdit(values),
   };
 
   const formatDate = (dateString) => {
@@ -70,8 +68,8 @@ const LibraryHistoryTable = ({
         </thead>
         <tbody>
           {booksData && booksData.libraryHistory?.length > 0 ? (
-            booksData.libraryHistory.map((book) => (
-              <tr key={book.bookTitle} className="border-t text-sm">
+            booksData.libraryHistory.map((book, index) => (
+              <tr key={index} className="border-t text-sm">
                 <td className="py-4 px-5">{book.bookTitle}</td>
                 <td className="py-4 px-5">{formatDate(book.issuedDate)}</td>
                 <td className="py-4 px-5">
@@ -117,7 +115,7 @@ const LibraryHistoryTable = ({
           fieldConfigs={fieldConfigs}
           heading="Edit Library Record"
           initialValues={selectedBookRecord || { bookTitle: "", status: "" }}
-          apiEndpoint={editLibraryRecordApi}
+          apiEndpoint={confirmEdit}
           isModalOpen={setEditModalOpen}
         />
       </Modal>

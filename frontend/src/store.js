@@ -2,8 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./redux/authSlice";
 import studentReducer from "./redux/studentSlice";
 import accountsReducer from "./redux/accountsSlice";
-import feesReducer from "./redux/feesSlice";
-import libraryReducer from "./redux/librarySlice";
 import idReducer from "./redux/idSlice";
 
 const loadState = () => {
@@ -20,8 +18,6 @@ const store = configureStore({
     auth :  authReducer ,
     students: studentReducer,
     accounts : accountsReducer,
-    feesSlice : feesReducer,
-    library: libraryReducer,
     ids: idReducer,
   } ,
   preloadedState: { auth: loadState() }, 

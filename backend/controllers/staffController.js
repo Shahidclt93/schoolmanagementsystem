@@ -33,16 +33,24 @@ const viewStudents = async (req, res) => {
   const { studentId } = req.params;
   const { amount, remarks, status } = req.body;
 
+  const generateISODate = () => {
+    return new Date().toISOString().split("T")[0]; // Returns YYYY-MM-DD
+  };
+
   try {
+  
     const student = await Student.findById(studentId);
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
     }
+    const feesData = { amount, remarks, status, date:generateISODate()}
 
-    student.feesHistory.push({ amount, remarks, status });
+    student.feesHistory.push(feesData);
     await student.save();
+    
+    const newFeeRecord = student.feesHistory[student.feesHistory.length - 1];
 
-    res.status(200).json({ message: "Fee record added successfully", feesHistory: student.feesHistory });
+    res.status(200).json({ message: "Fee record added successfully", feesHistory: newFeeRecord, studentId });
   } catch (error) {
     res.status(500).json({ message: "Error adding fee record", error: error.message });
   }
@@ -66,9 +74,9 @@ const viewStudents = async (req, res) => {
     if (amount) feeRecord.amount = amount;
     if (remarks) feeRecord.remarks = remarks;
     if (status) feeRecord.status = status;
-
+    const feesData = { amount, remarks, status }
     await student.save();
-    res.status(200).json({ message: "Fee record updated successfully", feesHistory: student.feesHistory });
+    res.status(200).json({ message: "Fee record updated successfully", feesHistory: feesData, studentId, feeId });
   } catch (error) {
     res.status(500).json({ message: "Error updating fee record", error: error.message });
   }

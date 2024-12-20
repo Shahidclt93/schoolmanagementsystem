@@ -10,7 +10,7 @@ const InputField = ({ field, value, error, touched, onBlur, onChange }) => {
     height = "p-2",
     required,
     readOnly,
-    defaultValue
+    
   } = field;
 
   return (
@@ -21,7 +21,7 @@ const InputField = ({ field, value, error, touched, onBlur, onChange }) => {
       <input
         type={type}
         name={name}
-        value={defaultValue || value || "" }
+        value={value || "" }
         onChange={onChange}
         onBlur={onBlur}
         className={`block text-sm ${width} ${height} border border-gray-300 focus:outline-blue`}

@@ -4,7 +4,7 @@ import FormComponent from "../components/reUsableComponents/FormComponent";
 import Modal from "../components/reUsableComponents/Modal";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import StudentsTable from "../components/reUsableComponents/StudentsTable";
+import StudentsTable from "../components/StudentsTable";
 import {
   addStudent,
   deleteStudent,
@@ -16,14 +16,13 @@ const Students = () => {
   const { students, status, error } = useSelector((state) => state.students);
   const { user, token } = useSelector((state) => state.auth);
   const [modalOpen, setModalOpen] = useState(false);
-  
+
   const btnConfig = {
     label: "Add New Student",
     type: "button",
     height: "py-2",
     width: "w-[150px]",
-    onClick:()=> setModalOpen(true)
-    
+    onClick: () => setModalOpen(true),
   };
   const confirmBtnConfig = {
     label: "create student",
@@ -58,11 +57,11 @@ const Students = () => {
       placeholder: "enter class",
     },
   ];
-  // setSchoolStudents(students.students)
+
   useEffect(() => {
     const loadStudents = async () => {
       try {
-        await dispatch(fetchStudents(token)).unwrap();
+        await dispatch(fetchStudents()).unwrap();
       } catch (error) {
         console.error("Error fetching students:", error);
       }

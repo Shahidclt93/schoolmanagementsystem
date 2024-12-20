@@ -25,7 +25,7 @@ const FormComponent = ({
 
   // Prepare initial form data
   const initialFormData = fieldConfigs.reduce((acc, field) => {
-    acc[field.name] = initialValues[field.name] || field.defaultValue || "";
+    acc[field.name] = initialValues[field.name]  || "";
     return acc;
   }, {});
 
@@ -85,10 +85,7 @@ const FormComponent = ({
             )}
             <div className="mt-2">
               <Button
-                config={{
-                  ...btnConfig,
-                  onClick: () => btnConfig.onClick(values),
-                }}
+                config={btnConfig}
                 disabled={isSubmitting}
               />
             </div>

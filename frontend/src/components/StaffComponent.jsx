@@ -14,16 +14,15 @@ import {
 const StaffComponent = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const [schoolStaffs, setSchoolStaffs] = useState([]);
+  const { staffs } = useSelector((state) => state.accounts);
 
   const [modalOpen, setModalOpen] = useState(false);
-
   const btnConfig = {
     label: "Create New Staff",
     type: "button",
     height: "py-2",
     width: "w-[150px]",
-    onClick:() => setModalOpen((prev) => !prev)
+    onClick:() => setModalOpen(true)
 
   };
   const confirmBtnConfig = {
@@ -68,7 +67,6 @@ const StaffComponent = () => {
       name: "role",
       label: "Role",
       type: "text",
-      defaultValue: "staff",
       readOnly: true,
     },
   ];
@@ -76,8 +74,7 @@ const StaffComponent = () => {
   useEffect(() => {
     const loadStaffs = async () => {
       try {
-        const data = await dispatch(fetchStaffs()).unwrap();
-        setSchoolStaffs(data.data);
+         await dispatch(fetchStaffs()).unwrap();
       } catch (error) {
         console.error("Error fetching staffs:", error);
       }
@@ -97,7 +94,6 @@ const StaffComponent = () => {
   const deleteStaff = async (id) => {
     try {
       await dispatch(deleteAccount(id)).unwrap();
-      setSchoolStaffs((prev) => prev.filter((staff) => staff._id !== id));
     } catch (error) {
       console.error("Error deleting staff:", error);
     }
@@ -120,6 +116,8 @@ const StaffComponent = () => {
             heading="Create New Account"
             apiEndpoint={createStaff}
             isModalOpen={setModalOpen}
+            initialValues= {{role:"staff"}}
+
           />
         </Modal>
         <div className=" bg-primary rounded-lg py-4  overflow-auto">
@@ -127,7 +125,7 @@ const StaffComponent = () => {
 
           <Table
             tableHeaders={tableHeaders}
-            schoolMemebers={schoolStaffs}
+            schoolMemebers={staffs}
             deleteMemberApi={deleteStaff}
           />
         </div>

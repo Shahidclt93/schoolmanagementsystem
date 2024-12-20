@@ -59,8 +59,8 @@ const Table = ({schoolMemebers, tableHeaders, deleteMemberApi}) => {
       </tr>
     </thead>
     <tbody>
-      {schoolMemebers.map((member) => (
-        <tr key={member._id} className=" border-t text-sm">
+      {schoolMemebers.map((member,index) => (
+        <tr key={index} className=" border-t text-sm">
           <td className="py-4 px-5"><div className="flex items-center space-x-2"><img src="Profile.png" className="h-10 w-10"/><span>{member.name}</span></div></td>
           <td className="py-4 px-5">{member.staffId || member.librarianId}</td>
           <td className="py-4 px-5">{member.email}</td>

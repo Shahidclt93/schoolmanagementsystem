@@ -14,7 +14,7 @@ import {
 const LibrarianComponent = () => {
   const dispatch = useDispatch();
   const { token, user } = useSelector((state) => state.auth);
-  const [librarians, setLibrarians] = useState([]);
+  const { librarians } = useSelector((state) => state.accounts);
   const [modalOpen, setModalOpen] = useState(false);
 
   const btnConfig = {
@@ -22,7 +22,7 @@ const LibrarianComponent = () => {
     type: "button",
     height: "py-2",
     width: "w-[200px]",
-    onClick:() => setModalOpen((prev) => !prev)
+    onClick:() => setModalOpen(true)
 
   };
   const confirmBtnConfig = {
@@ -67,7 +67,6 @@ const LibrarianComponent = () => {
       name: "role",
       label: "Role",
       type: "text",
-      defaultValue: "librarian",
       readOnly: true,
     },
   ];
@@ -76,10 +75,7 @@ const LibrarianComponent = () => {
   useEffect(() => {
     const loadLibrarians = async () => {
       try {
-       const data=   await dispatch(fetchLibrarians(token)).unwrap();
-         setLibrarians(data.data);
-
-        
+         await dispatch(fetchLibrarians()).unwrap();
       } catch (error) {
         console.error("Error fetching librarians:", error);
       }
@@ -120,6 +116,7 @@ const LibrarianComponent = () => {
             heading="Create New Account"
             apiEndpoint={createLibrarian}
             isModalOpen={setModalOpen}
+            initialValues={{role:"librarian"}}
           />
         </Modal>
         <div className=" bg-primary rounded-lg py-4  overflow-auto">

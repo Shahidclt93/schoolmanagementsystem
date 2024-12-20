@@ -138,6 +138,13 @@ const accountsSlice = createSlice({
       .addCase(createAccount.fulfilled, (state, action) => {
         state.loading = false;
         state.successMessage = action.payload.message;
+        if(action.payload.account.role === "librarian"){
+          state.librarians.push(action.payload.account)
+        }
+        if(action.payload.account.role === "staff"){
+          state.staffs.push(action.payload.account)
+        }
+        // state.staffs.push(action.payload.account)
       })
       .addCase(createAccount.rejected, (state, action) => {
         state.loading = false;
@@ -166,6 +173,13 @@ const accountsSlice = createSlice({
       .addCase(deleteAccount.fulfilled, (state, action) => {
         state.loading = false;
         state.successMessage = action.payload.message;
+        if(action.payload.deletedUser.role === "staff"){
+          state.staffs = state.staffs.filter((staff) => staff._id !== action.payload.deletedUser._id);
+        }
+        if(action.payload.deletedUser.role === "librarian"){
+          state.librarians = state.librarians.filter((librarian) => librarian._id !== action.payload.deletedUser._id);
+        }
+        console.log(action.payload)
       })
       .addCase(deleteAccount.rejected, (state, action) => {
         state.loading = false;

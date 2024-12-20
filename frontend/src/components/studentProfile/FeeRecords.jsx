@@ -3,11 +3,9 @@ import Button from "../reUsableComponents/Button";
 import Modal from "../reUsableComponents/Modal";
 import FormComponent from "../reUsableComponents/FormComponent";
 import FeesTable from "../FeesTable";
-import { useSelector } from "react-redux";
 
 const FeeRecords = ({ studentDetails, createFeeRecord, editFeeRecordApi }) => {
   const [feeModalOpen, setFeeModalOpen] = useState(false);
-  const { user } = useSelector((state) => state.auth);
 
 
   const btnConfig = {
@@ -37,7 +35,6 @@ const FeeRecords = ({ studentDetails, createFeeRecord, editFeeRecordApi }) => {
       name: "remarks",
       label: "Remarks",
       type: "text",
-      required: true,
       placeholder: "Remarks",
     },
     {

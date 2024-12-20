@@ -1,46 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { fetchStudents } from "../../redux/studentSlice";
-import { addFeeRecord, editFeeRecord } from "../../redux/feesSlice";
-import { addLibraryRecord, editLibraryRecord } from "../../redux/librarySlice";
+import { fetchStudents, addFeeRecord, editFeeRecord ,  addLibraryRecord, editLibraryRecord} from "../../redux/studentSlice";
 import ProfileDetails from "./ProfileDetails";
 import FeeRecords from "./FeeRecords";
 import LibraryRecords from "./LibraryRecords";
 
 const StudentProfile = () => {
-  const { feeId, libraryId } = useSelector((state) => state.ids);
-  // console.log(libraryId)
+  const { libraryId,feeId } = useSelector((state) => state.ids);
   const { token, user } = useSelector((state) => state.auth);
+  const { students } = useSelector((state) => state.students);
+
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [studentDetails, setStudentDetails] = useState({});
+  
+  const studentDetails =  students.find((s) => s._id === id);
+
 
   useEffect(() => {
     const fetchStudentDetails = async () => {
       try {
-        const response = await dispatch(fetchStudents(token)).unwrap();
-        const student = response.students.find((s) => s._id === id);
-        setStudentDetails(student || {});
+        await dispatch(fetchStudents()).unwrap();
       } catch (error) {
         console.error("Error fetching student details:", error);
       }
     };
     fetchStudentDetails();
   }, [dispatch, token, id]);
-  // console.log(studentDetails)
-
   const generateISODate = () => {
     return new Date().toISOString().split("T")[0]; // Returns YYYY-MM-DD
   };
-
   return (
     <div className="m-4">
       <ProfileDetails
-        name={studentDetails.name}
-        email={studentDetails.email}
-        className={studentDetails.class}
-        studentId={studentDetails.studentId}
+        name={studentDetails?.name}
+        email={studentDetails?.email}
+        className={studentDetails?.class}
+        studentId={studentDetails?.studentId}
       />
       {["admin", "staff"].includes(user.role) &&
       
@@ -49,18 +45,19 @@ const StudentProfile = () => {
         createFeeRecord={(values) =>
           dispatch(addFeeRecord({ studentId: id, feeData: values }))
         }
-        editFeeRecordApi={(values) =>
+        editFeeRecordApi={ (values) =>{
           dispatch(
-            editFeeRecord({
-              studentId: id,
-              feeId: feeId,
-              feeData: {
-                amount: values.amount,
-                remarks: values.remarks,
-                status: values.status,
-              },
-            })
-          )
+              editFeeRecord({
+                studentId: id,
+                feeId: feeId,
+                feeData: {
+                  amount: values.amount,
+                  remarks: values.remarks,
+                  status: values.status,
+                },
+              })
+            )
+        } 
         }
       /> 
        }
@@ -68,8 +65,9 @@ const StudentProfile = () => {
       
       <LibraryRecords
         studentDetails={studentDetails || []}
-        createLibraryRecord={(values) =>
-          dispatch(addLibraryRecord({ studentId: id, recordData: values }))
+        createLibraryRecord={(values) =>{
+          dispatch(addLibraryRecord({ studentId: id, recordData: values })) 
+          }
         }
         editLibraryRecordApi={(values) =>
           dispatch(
@@ -84,6 +82,7 @@ const StudentProfile = () => {
               },
             })
           )
+         
         }
       />
       }

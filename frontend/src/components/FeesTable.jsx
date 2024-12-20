@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import Modal from "./reUsableComponents/Modal";
 import FormComponent from "./reUsableComponents/FormComponent";
-import { setFeeId, clearFeeId } from "../redux/idSlice";
+import { setFeeId } from "../redux/idSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const FeesTable = ({ schoolMemebers, tableHeaders, editFeeRecordApi }) => {
@@ -40,24 +40,19 @@ const FeesTable = ({ schoolMemebers, tableHeaders, editFeeRecordApi }) => {
     dispatch(setFeeId(feeRecord._id));
   };
 
-  const confirmEdit = async () => {
-    editFeeRecordApi();
-    setFeeId(null);
-    dispatch(clearFeeId());
+  const confirmEdit = (values) => {
+    editFeeRecordApi(values);
   };
-
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleString(); // Formats the date to a readable format
-  };
-
   const editBtnConfig = {
     label: "Edit Record",
     type: "submit",
     height: "py-2",
     width: "w-[150px]",
-    onClick: confirmEdit,
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString(); // Formats the date to a readable format
   };
 
   return (
@@ -82,9 +77,9 @@ const FeesTable = ({ schoolMemebers, tableHeaders, editFeeRecordApi }) => {
         </thead>
         <tbody>
           {schoolMemebers.feesHistory &&
-          schoolMemebers.feesHistory.length > 0 ? (
-            schoolMemebers.feesHistory.map((feesHis) => (
-              <tr key={feesHis._id} className="border-t text-sm">
+          schoolMemebers.feesHistory?.length > 0 ? (
+            schoolMemebers.feesHistory.map((feesHis, index) => (
+              <tr key={index} className="border-t text-sm">
                 <td className="py-4 px-5">{feesHis.amount}</td>
                 <td className="py-4 px-5">{feesHis.remarks}</td>
                 <td className={`py-4 px-5 `}>
@@ -97,8 +92,8 @@ const FeesTable = ({ schoolMemebers, tableHeaders, editFeeRecordApi }) => {
                   >
                     {feesHis.status}
                   </span>
-                </td>{" "}
-                <td className="py-4 px-5">{formatDate(feesHis.date)}</td>{" "}
+                </td>
+                <td className="py-4 px-5">{formatDate(feesHis.date)}</td>
                 {user.role === "admin" || user.role === "staff" ? (
                   <td className="py-4 px-5">
                     <div className="flex flex-row space-x-4 text-gray-600">
@@ -131,7 +126,7 @@ const FeesTable = ({ schoolMemebers, tableHeaders, editFeeRecordApi }) => {
           initialValues={
             selectedFeeRecord || { amount: "", remarks: "", status: "" }
           }
-          apiEndpoint={editFeeRecordApi}
+          apiEndpoint={confirmEdit}
           isModalOpen={setEditModalOpen}
         />
       </Modal>

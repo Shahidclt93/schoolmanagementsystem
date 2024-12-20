@@ -23,17 +23,25 @@ const User = require("../models/userModel.js");
 const addLibraryRecord = async (req, res) => {
   const { studentId } = req.params;
   const { bookTitle, status } = req.body;
-
+  
+  const generateISODate = () => {
+    return new Date().toISOString().split("T")[0]; // Returns YYYY-MM-DD
+  };
+  
   try {
     const student = await Student.findById(studentId);
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
     }
 
-    student.libraryHistory.push({ bookTitle, status });
+    const libData = { bookTitle, status, issuedDate: generateISODate() }
+
+    student.libraryHistory.push(libData);
     await student.save();
 
-    res.status(200).json({ message: "Library record added successfully", libraryHistory: student.libraryHistory });
+    const newLibRecord = student.libraryHistory[student.libraryHistory.length - 1];
+
+    res.status(200).json({ message: "Library record added successfully", libraryHistory: newLibRecord, studentId });
   } catch (error) {
     res.status(500).json({ message: "Error adding library record", error: error.message });
   }
@@ -58,8 +66,11 @@ const addLibraryRecord = async (req, res) => {
     if (status) libraryRecord.status = status;
     if (returnedDate) libraryRecord.returnedDate = returnedDate;
 
+    const libData = { bookTitle, status, returnedDate}
+
+
     await student.save();
-    res.status(200).json({ message: "Library record updated successfully", libraryHistory: student.libraryHistory });
+    res.status(200).json({ message: "Library record updated successfully", libraryHistory: libData, studentId, libraryId });
   } catch (error) {
     res.status(500).json({ message: "Error updating library record", error: error.message });
   }
