@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import Modal from "./reUsableComponents/Modal";
 import FormComponent from "./reUsableComponents/FormComponent";
-import { setFeeId } from "../redux/idSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const FeesTable = ({ schoolMemebers, tableHeaders, editFeeRecordApi }) => {
-  const dispatch = useDispatch();
   const [selectedFeeRecord, setSelectedFeeRecord] = useState(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
 
@@ -37,18 +35,21 @@ const FeesTable = ({ schoolMemebers, tableHeaders, editFeeRecordApi }) => {
   const openEditModal = (feeRecord) => {
     setEditModalOpen(true);
     setSelectedFeeRecord(feeRecord);
-    dispatch(setFeeId(feeRecord._id));
   };
 
   const confirmEdit = (values) => {
-    editFeeRecordApi(values);
+   editFeeRecordApi({
+    ...values, 
+    feeId: selectedFeeRecord._id, 
+  });
+    
   };
   const editBtnConfig = {
     label: "Edit Record",
     type: "submit",
     height: "py-2",
     width: "w-[150px]",
-  };
+    }
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

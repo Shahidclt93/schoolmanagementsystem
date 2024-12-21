@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./redux/authSlice";
 import studentReducer from "./redux/studentSlice";
 import accountsReducer from "./redux/accountsSlice";
-import idReducer from "./redux/idSlice";
 
 const loadState = () => {
   const serializedState = localStorage.getItem('auth');
@@ -18,7 +17,6 @@ const store = configureStore({
     auth :  authReducer ,
     students: studentReducer,
     accounts : accountsReducer,
-    ids: idReducer,
   } ,
   preloadedState: { auth: loadState() }, 
 });

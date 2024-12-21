@@ -35,7 +35,6 @@ const FormComponent = ({
       setSubmitting(false);
       return;
     }
-
     try {
       await apiEndpoint(values); // Call the API with form data
       resetForm(); // Reset form on success

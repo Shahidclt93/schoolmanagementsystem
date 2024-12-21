@@ -7,7 +7,6 @@ import FeeRecords from "./FeeRecords";
 import LibraryRecords from "./LibraryRecords";
 
 const StudentProfile = () => {
-  const { libraryId,feeId } = useSelector((state) => state.ids);
   const { token, user } = useSelector((state) => state.auth);
   const { students } = useSelector((state) => state.students);
 
@@ -49,7 +48,7 @@ const StudentProfile = () => {
           dispatch(
               editFeeRecord({
                 studentId: id,
-                feeId: feeId,
+                feeId: values.feeId,
                 feeData: {
                   amount: values.amount,
                   remarks: values.remarks,
@@ -69,11 +68,11 @@ const StudentProfile = () => {
           dispatch(addLibraryRecord({ studentId: id, recordData: values })) 
           }
         }
-        editLibraryRecordApi={(values) =>
+        editLibraryRecordApi={(values) =>{
           dispatch(
             editLibraryRecord({
               studentId: id,
-              libraryId: libraryId,
+              libraryId: values.libraryId,
               updatedData: {
                 bookTitle: values.bookTitle,
                 status: values.status,
@@ -82,7 +81,7 @@ const StudentProfile = () => {
               },
             })
           )
-         
+         }
         }
       />
       }

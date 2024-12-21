@@ -2,15 +2,13 @@ import React, { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import Modal from "../components/reUsableComponents/Modal";
 import FormComponent from "./reUsableComponents/FormComponent";
-import { setLibraryId } from "../redux/idSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const LibraryHistoryTable = ({
   booksData,
   tableHeaders,
   editLibraryRecordApi,
 }) => {
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedBookRecord, setSelectedBookRecord] = useState(null);
@@ -18,10 +16,12 @@ const LibraryHistoryTable = ({
   const openEditModal = (book) => {
     setEditModalOpen(true);
     setSelectedBookRecord(book);
-    dispatch(setLibraryId(book._id));
   };
   const confirmEdit = (values) => {
-    editLibraryRecordApi(values);
+    editLibraryRecordApi({
+      ...values,
+      libraryId: selectedBookRecord._id
+    });
   };
 
   const fieldConfigs = [
