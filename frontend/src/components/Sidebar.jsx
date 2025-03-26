@@ -33,7 +33,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
   return (
     <div
-      className={`inset-0 bg-[#00000098] ${sidebarOpen && "fixed"}`}
+      className={`inset-0 bg-[#00000098] ${sidebarOpen && "fixed z-50"}`}
       onClick={() => setSidebarOpen(false)}
     >
       <div

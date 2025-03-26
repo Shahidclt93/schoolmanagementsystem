@@ -43,12 +43,12 @@ const SignIn = () => {
   const apiEndpoint = async (values) => {
     try {
       await dispatch(login(values)).unwrap(); 
-      setLoginMessage("Signin succussful");
+      setLoginMessage("Sign-in successful");
       setTimeout(()=>{
         navigate("/dashboard");
       },1000)
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error("Sign-in failed:", error);
       setLoginMessage("Invalid email or password");
     }
   };

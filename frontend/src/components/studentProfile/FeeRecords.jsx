@@ -3,10 +3,12 @@ import Button from "../reUsableComponents/Button";
 import Modal from "../reUsableComponents/Modal";
 import FormComponent from "../reUsableComponents/FormComponent";
 import FeesTable from "../FeesTable";
+import { addFeeRecord, editFeeRecord } from "../../redux/studentSlice";
+import { useDispatch } from "react-redux";
 
-const FeeRecords = ({ studentDetails, createFeeRecord, editFeeRecordApi }) => {
+const FeeRecords = ({ studentDetails, id }) => {
+  const dispatch = useDispatch();
   const [feeModalOpen, setFeeModalOpen] = useState(false);
-
 
   const btnConfig = {
     label: "New Fee Record",
@@ -58,7 +60,9 @@ const FeeRecords = ({ studentDetails, createFeeRecord, editFeeRecordApi }) => {
           btnConfig={confirmBtnConfig}
           fieldConfigs={fieldConfigs}
           heading="Add Fee Record"
-          apiEndpoint={createFeeRecord}
+          apiEndpoint={(values) =>
+            dispatch(addFeeRecord({ studentId: id, feeData: values }))
+          }
           isModalOpen={setFeeModalOpen}
         />
       </Modal>
@@ -67,7 +71,19 @@ const FeeRecords = ({ studentDetails, createFeeRecord, editFeeRecordApi }) => {
         <FeesTable
           schoolMemebers={studentDetails}
           tableHeaders={tableHeaders}
-          editFeeRecordApi={editFeeRecordApi}
+          editFeeRecordApi={(values) => {
+            dispatch(
+              editFeeRecord({
+                studentId: id,
+                feeId: values.feeId,
+                feeData: {
+                  amount: values.amount,
+                  remarks: values.remarks,
+                  status: values.status,
+                },
+              })
+            );
+          }}
         />
       </div>
     </div>

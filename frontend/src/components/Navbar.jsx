@@ -8,12 +8,9 @@ import { logout } from "../redux/authSlice";
 const Navbar = ({ setSidebarOpen, sidebarOpen }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector ((state) => state.auth);
-
+  const { user } = useSelector((state) => state.auth);
 
   const [dropDownOpen, setDropDownOpen] = useState(false);
-
-
 
   return (
     <div className="py-4 bg-primary shadow-md w-full flex justify-end px-2">
